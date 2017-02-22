@@ -51,19 +51,21 @@ header{
 	margin-left: 60px;
 }
 .header__nav-item{
-	display: inline-block;
+	display: block;
+	float: left;
+	font-size: 16px;
 	text-align: center;
-	width: 94px;
+	width: 120px;
 	line-height: 65px;
-	margin-left:0px;
 }
 .section1 .nav_active{
 	color: red;
 }
 .header__nav-button{
-	display: inline-block;
+	display: block;
+	float: left;
 	text-align: center;
-	margin: 0px 30px;
+	margin: 12.5px 30px;
 	width: 96px;
 	height: 40px;
 	line-height: 40px;
@@ -356,6 +358,6 @@ footer{
 	background: red;
 	bottom: 0;
 	left: 0;
-	margin-left: 15px;
+	margin-left: 28px;
 	transition: all 0.3s;
 }
