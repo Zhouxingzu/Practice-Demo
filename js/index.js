@@ -81,7 +81,6 @@ var navAnimateElements = {
 }
 //设置屏内的元素播放动画(添加动画样式)
 var playAnimateDone = function(screenCls){
-    var screen = getElem(screenCls);//获取当前屏元素
     var animateElements = screenAnimateElements[screenCls]; 
     for(var i=0; i<animateElements.length; i++){
         var element = getAllElem(animateElements[i]);
@@ -93,7 +92,6 @@ var playAnimateDone = function(screenCls){
 }
 //设置顶部菜单字体改变样式的动画
 var addNavChange = function(screenCls){
-    var screen = getElem(screenCls);//获取当前屏元素
     var animateElements = navAnimateElements[screenCls];
     for(var i=0; i<animateElements.length; i++){
         var element = getAllElem(animateElements[i]);
@@ -105,7 +103,6 @@ var addNavChange = function(screenCls){
 }
 //删除顶部菜单字体改变样式的动画
 var delNavChange = function(screenCls){
-    var screen = getElem(screenCls);//获取当前屏元素
     var animateElements = navAnimateElements[screenCls];
     for(var i=0; i<animateElements.length; i++){
         var element = getAllElem(animateElements[i]);
@@ -116,11 +113,12 @@ var delNavChange = function(screenCls){
     }
 }
 
+//页面加载后就开始第一屏动画
 window.onload = function(){
     playAnimateDone('.section1');
 }
 
-//当前屏的菜单变红色
+//当前屏的导航菜单变红色
 var navItems = getAllElem('.header__nav-item');
 var outlineItems = getAllElem('.outline__item');
 
@@ -130,11 +128,31 @@ var switchNavActive = function(idx){
     }
     addCls(navItems[idx],'nav_active');
 }
-switchNavActive(0);//默认第一个为红色
+
+switchNavActive(0);//默认第一个导航菜单为红色
+
+//顶部滑动门效果
+for(var i=0; i<navItems.length; i++){
+    navItems[i].id=i;//为每个导航菜单加一个id值
+    //鼠标移入滑动到指定位置（匹配id值）
+    navItems[i].onmouseover=function(){
+        navTip.style.left=120*this.id+'px';
+    }
+    //鼠标移出回到原始位置
+    var navBlock = getElem('.right');
+    navBlock.onmouseout = slideTip; //注意这里调用函数不能加括号
+}
+var navTip = getElem('.header__nav-tip');
+var slideTip = function(){
+    //获取当前位置的导航菜单
+    var currentNav = getElem('.nav_active');
+    var idx = currentNav.id;
+    navTip.style.left=120*idx+'px';
+}
 
 //滚动到哪就播放到哪
 window.onscroll = function(){
-    var top = document.body.scrollTop;
+    var top = document.body.scrollTop || document.documentElement.scrollTop;
 
     /*侧边栏动画*/
     var a = getElem('.outline');
@@ -165,7 +183,7 @@ window.onscroll = function(){
         playAnimateDone('.section5');
     }
 
-    //当前屏菜单变红色
+    //当前屏导航菜单变红色，滑动门到当前位置
     if(top<640*1-100){
         switchNavActive(0);
         slideTip();
@@ -193,6 +211,7 @@ var setNavJump = function(i,lib){
     var item = lib[i];
     item.onclick = function(){
         document.body.scrollTop = i*640;//点击滚动到指定屏
+        document.documentElement.scrollTop = i*640;//点击滚动到指定屏
     }
 }
 for(var i=0; i<navItems.length; i++){
@@ -202,22 +221,3 @@ for(var i=0; i<navItems.length; i++){
 for(var i=0; i<outlineItems.length; i++){
     setNavJump(i,outlineItems);
 }
-
-//顶部滑动门效果
-var slideTip = function(){
-    var currentNav = getElem('.nav_active');
-    var idx = currentNav.id;
-    navTip.style.left=102*idx+'px';
-}
-var navTip = getElem('.header__nav-tip');
-for(var i=0; i<navItems.length; i++){
-    navItems[i].id=i;
-    //鼠标移入的滑动效果
-    navItems[i].onmouseover=function(){
-        navTip.style.left=102*this.id+'px';
-    }
-    //鼠标移出回到原始位置
-    var navBlock = getElem('.right');
-    navBlock.onmouseout = slideTip; //注意这里调用函数不能加括号
-}
-
