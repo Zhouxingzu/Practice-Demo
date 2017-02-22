@@ -132,16 +132,6 @@ var switchNavActive = function(idx){
 switchNavActive(0);//默认第一个导航菜单为红色
 
 //顶部滑动门效果
-for(var i=0; i<navItems.length; i++){
-    navItems[i].id=i;//为每个导航菜单加一个id值
-    //鼠标移入滑动到指定位置（匹配id值）
-    navItems[i].onmouseover=function(){
-        navTip.style.left=120*this.id+'px';
-    }
-    //鼠标移出回到原始位置
-    var navBlock = getElem('.right');
-    navBlock.onmouseout = slideTip; //注意这里调用函数不能加括号
-}
 var navTip = getElem('.header__nav-tip');
 var slideTip = function(){
     //获取当前位置的导航菜单
@@ -149,6 +139,17 @@ var slideTip = function(){
     var idx = currentNav.id;
     navTip.style.left=120*idx+'px';
 }
+
+for(var i=0; i<navItems.length; i++){
+    navItems[i].id=i;//为每个导航菜单加一个id值
+    //鼠标移入滑动到指定位置（匹配id值）
+    navItems[i].onmouseover=function(){
+        navTip.style.left=120*this.id+'px';
+    }
+}
+//鼠标移出回到原始位置
+var navBlock = getElem('.right');
+navBlock.onmouseout = slideTip; //注意这里调用函数不能加括号
 
 //滚动到哪就播放到哪
 window.onscroll = function(){
@@ -209,6 +210,8 @@ window.onscroll = function(){
 //双向定位
 var setNavJump = function(i,lib){
     var item = lib[i];
+    var timer = null;
+    var isTop = true;
     item.onclick = function(){
         document.body.scrollTop = i*640;//点击滚动到指定屏
         document.documentElement.scrollTop = i*640;//点击滚动到指定屏
