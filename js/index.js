@@ -147,6 +147,7 @@ for(var i=0; i<navItems.length; i++){
         navTip.style.left=120*this.id+'px';
     }
 }
+
 //鼠标移出回到原始位置
 var navBlock = getElem('.right');
 navBlock.onmouseout = slideTip; //注意这里调用函数不能加括号
@@ -211,16 +212,42 @@ window.onscroll = function(){
 var setNavJump = function(i,lib){
     var item = lib[i];
     var timer = null;
-    var isTop = true;
+    var timer2 = null;
+    //点击菜单滑动到指定屏
     item.onclick = function(){
-        document.body.scrollTop = i*640;//点击滚动到指定屏
-        document.documentElement.scrollTop = i*640;//点击滚动到指定屏
+            if(timer){
+                clearInterval(timer);
+            }
+            var timer = setInterval(function(){
+                var top = document.body.scrollTop || document.documentElement.scrollTop;
+                var speed = 20;
+                if(top>i*640){
+                    document.body.scrollTop = top - speed;  
+                    document.documentElement.scrollTop = top - speed;
+                }
+                if(top <= i*640){
+                    clearInterval(timer);
+                }        
+            },1)
+            
+            if(timer2){
+                clearInterval(timer2);
+            }
+            var timer2 = setInterval(function(){
+                var top = document.body.scrollTop;
+                var speed = 20;
+                if(top<i*640){
+                    document.body.scrollTop = top + speed; 
+                    document.documentElement.scrollTop = top + speed;
+                }
+                if(top >= i*640){
+                    clearInterval(timer2);
+                }        
+            },1)
+            navTip.style.left=120*i+'px';    
     }
 }
 for(var i=0; i<navItems.length; i++){
     setNavJump(i,navItems);
-}
-
-for(var i=0; i<outlineItems.length; i++){
     setNavJump(i,outlineItems);
 }
