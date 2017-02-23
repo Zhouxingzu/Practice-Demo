@@ -243,8 +243,7 @@ var setNavJump = function(i,lib){
                 if(top >= i*640){
                     clearInterval(timer2);
                 }        
-            },1)
-            navTip.style.left=120*i+'px';    
+            },1)   
     }
 }
 for(var i=0; i<navItems.length; i++){
